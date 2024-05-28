@@ -1,5 +1,9 @@
 using Identity.Application.Common.Contracts;
+using Identity.Application.Common.Contracts.Repositories;
+using Identity.Application.Common.Contracts.Services;
 using Identity.Infrastructure.DataProvider;
+using Identity.Infrastructure.DataProvider.Repositories;
+using Identity.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,15 +14,17 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
-
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(
-                configuration["DatabaseSettings:ConnectionString"],
+                configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly("Identity.API")
             )
         );
+
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
     }
