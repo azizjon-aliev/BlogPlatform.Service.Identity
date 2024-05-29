@@ -1,5 +1,6 @@
 using Identity.API.Middleware;
 using Identity.Application;
+using Identity.Application.Common.Contracts.Services;
 using Identity.Infrastructure;
 using Identity.Infrastructure.DataProvider;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,12 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate();
+        if (context.Database.IsNpgsql())
+        {
+            context.Database.Migrate();
+        }
+
+        await context.SeedAsync(app.Logger, scope.ServiceProvider.GetRequiredService<IPasswordService>());
     }
     catch (Exception e)
     {
