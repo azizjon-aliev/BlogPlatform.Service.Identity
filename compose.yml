@@ -1,0 +1,8 @@
+services:
+  identity.api:
+    container_name: IdentityService
+    image: azizjonaliev/blog.platform.identity.api:latest
+    
+  identity.db:
+    container_name: IdentityServiceDb
+    image: postgres:latest
