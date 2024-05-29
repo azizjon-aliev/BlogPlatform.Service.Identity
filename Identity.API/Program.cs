@@ -1,3 +1,4 @@
+using Identity.API.Middleware;
 using Identity.Application;
 using Identity.Infrastructure;
 using Identity.Infrastructure.DataProvider;
@@ -45,4 +46,5 @@ using (var scope = app.Services.CreateScope())
 
 app.UseAuthorization();
 app.MapControllers();
+app.UseCustomExceptionHandler();
 app.Run();
