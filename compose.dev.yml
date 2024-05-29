@@ -9,9 +9,9 @@ services:
       POSTGRES_DB: ${IDENTITY_POSTGRES_DB}
       POSTGRES_PORT: ${IDENTITY_POSTGRES_PORT}
     ports:
-      - '${IDENTITY_POSTGRES_PORT:-5431}:${IDENTITY_POSTGRES_PORT:-5431}'
+      - '${IDENTITY_POSTGRES_PORT:-5431}:5432'
     volumes:
       - identity.dev.data:/var/lib/postgresql/data
-  
+
 volumes:
   identity.dev.data:
