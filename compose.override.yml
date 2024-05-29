@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  identity.api:
+    build:
+      context: .
+      dockerfile: Identity.API/Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${IDENTITY_ASPNETCORE_ENVIRONMENT}
+      - ConnectionString=Host=identity.db;Port=${IDENTITY_POSTGRES_PORT};Database=${IDENTITY_POSTGRES_DB};Username=${IDENTITY_POSTGRES_USER};Password=${IDENTITY_POSTGRES_PASSWORD};
+      - PORT=${IDENTITY_PORT}
+      - JwtSettings__Key=${IDENTITY_JWT_SECRET}
+      - JwtSettings__Issuer=${IDENTITY_JWT_ISSUER}
+      - JwtSettings__Audience=${IDENTITY_JWT_AUDIENCE}
+    ports:
+      - "${IDENTITY_PORT}:${IDENTITY_PORT}"
+    depends_on:
+      - identity.db
+    networks:
+      - identity_network
+
+  identity.db:
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_USER: ${IDENTITY_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${IDENTITY_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${IDENTITY_POSTGRES_DB}
+      POSTGRES_PORT: ${IDENTITY_POSTGRES_PORT}
+    ports:
+      - "${IDENTITY_POSTGRES_PORT}:${IDENTITY_POSTGRES_PORT}"
+    volumes:
+      - identity.dev.data:/var/lib/postgresql/data
+    networks:
+      - identity_network
+
+volumes:
+  identity.dev.data:
+
+networks:
+  identity_network:
+    driver: bridge
