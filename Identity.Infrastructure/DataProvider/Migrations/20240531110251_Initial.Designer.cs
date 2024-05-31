@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.DataProvider.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240529123145_Initial")]
+    [Migration("20240531110251_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -52,6 +52,9 @@ namespace Identity.Infrastructure.DataProvider.Migrations
                     b.Property<string>("RefreshToken")
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()

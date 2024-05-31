@@ -12,4 +12,6 @@ public interface IUserRepository
     public Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
     public Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken);
+    
+    public Task<User?> GetByRefreshToken(string refreshToken, CancellationToken cancellationToken);
 }
