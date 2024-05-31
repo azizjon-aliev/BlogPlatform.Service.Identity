@@ -29,4 +29,9 @@ public class UserRepository(IApplicationDbContext context) : IUserRepository
     {
         return await context.Users.FirstOrDefaultAsync(u => u.Username == username, cancellationToken);
     }
+
+    public async Task<User?> GetByRefreshToken(string refreshToken, CancellationToken cancellationToken)
+    {
+        return await context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken, cancellationToken);
+    }
 }

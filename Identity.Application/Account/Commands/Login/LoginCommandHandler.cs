@@ -17,14 +17,14 @@ public class LoginCommandHandler(
         var user = await repository.GetByUsernameAsync(request.Username, cancellationToken);
         if (user == null)
         {
-            throw new CustomBadRequestException("Неверное имя пользователя или пароль");
+            throw new CustomException("Неверное имя пользователя или пароль");
         }
 
         if (!passwordService.VerifyPassword(request.Password, user.Password))
         {
-            throw new CustomBadRequestException("Неверное имя пользователя или пароль");
+            throw new CustomException("Неверное имя пользователя или пароль");
         }
 
-        return tokenService.GenerateToken(user);
+        return await tokenService.GenerateToken(user, cancellationToken);
     }
 }
